@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-_4ve7b%*tuz8fpio2j2%c=d)awx@5jhu294+o^_mt5z-vh9+#_
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -187,16 +186,16 @@ MANAGERS = (
 )
 
 # при новой регистрации, данному списку администраторов будет приходить оповещение
-ADMINS = (
+ADMINS = [
     ('administrator', 'servisvlg4@rambler.ru'),
-)
+]
 
 APSCHEDULER_DATETIME_FORMAT = 'N j, Y, f:s a'  # формат в котором будет выполняться рассылка
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # за сколько секунд наша функция должна выполниться
 
 # Если вы используете Redis Labs, то переменные CELERY_BROKER_URL и CELERY_RESULT_BACKEND должны строиться по шаблону:
 # redis://логин:пароль@endpoint:port где endpoint и port вы также берёте из настроек Redis Labs.
-CELERY_BROKER_URL = 'redis://localhost:6379'  # указывает на URL брокера сообщений (Redis). По умолчанию порт 6379
+CELERY_BROKER_URL = 'redis://localhost:6379'  # Указывает на URL брокера сообщений (Redis). По умолчанию порт 6379
 CELERY_RESULT_BACKEND = 'redis://localhost:6379'  # указывает на хранилище результатов выполнения задач
 CELERY_ACCEPT_CONTENT = ['application/json']  # допустимый формат данных
 CELERY_TASK_SERIALIZER = 'json'  # метод сериализации задач
@@ -204,123 +203,125 @@ CELERY_RESULT_SERIALIZER = 'json'  # метод сериализации рез�
 # CELERY_TIMEZONE = 'Europe/Mosсow'
 CELERY_ENABLE_UTC = False  # в состоянии True, задача по времени не стартовала, работала только в режиме 'каждую минуту'
 
+# в комментарии указан номер задания (из "Итоговое задание 13.4"), к которому преминялся данный кусок словаря.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
 
-    'formatters': {  # 1
+    'formatters': {
         'form_debug': {
             'format': '{asctime} - [{levelname}] - {message}',
             'style': '{',
-        },
+        },  # 1
 
-        'form_warning_mail': {  # 1 и 5
+        'form_warning_mail': {
             'format': '{asctime} - [{levelname}] - {message} - {pathname} ',
             'style': '{',
-        },
+        },  # 1 и 5
 
-        'form_error': {  # 1 и 3
+        'form_error': {
             'format': '{asctime} - [{levelname}] - {message} - {pathname} - {exc_info} ',
-            'style': '{', },
+            'style': '{',
+        },  # 1 и 3
 
-        'general_security_info': {  # 2 и 4
+        'general_security_info': {
             'format': '{asctime} - [{levelname}] - {message} - {module} ',
             'style': '{',
-        },
+        },  # 2 и 4
     },
 
-    'handlers': {  # 1
+    'handlers': {
         'console_d': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'form_debug',
-        },
+        },  # 1
 
-        'console_w': {  # 1
+        'console_w': {
             'level': 'WARNING',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'form_warning_mail',
-        },
+        },  # 1
 
-        'console_e': {  # 1
+        'console_e': {
             'level': 'ERROR',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'form_error',
-        },
+        },  # 1
 
-        'general_hand': {  # 2
+        'general_hand': {
             'level': 'INFO',
             'filters': ['require_debug_false'],
             'class': 'logging.FileHandler',
             'formatter': 'general_security_info',
             'filename': 'general.log',
-        },
+        },  # 2
 
-        'errors_hand': {  # 3
+        'errors_hand': {
             'level': 'ERROR',
             'class': 'logging.FileHandler',
             'formatter': 'form_error',
             'filename': 'errors.log',
-        },
+        },  # 3
 
-        'security_hand': {  # 4
+        'security_hand': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'formatter': 'general_security_info',
             'filename': 'security.log',
-        },
+        },  # 4
 
-        'mail_admins': {  # 5
+        'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler',
             'formatter': 'form_warning_mail',
-        },
+        },  # 5
     },
 
     'filters': {
-        'require_debug_true': {'()': 'django.utils.log.RequireDebugTrue'},
-        'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'},
+        'require_debug_true': {'()': 'django.utils.log.RequireDebugTrue'},  # 1 х3
+        'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'},  # 5 и 2
     },
 
     'loggers': {
-        'django': {  # 1 и 2
+        'django': {
             'handlers': ['console_d', 'console_w', 'console_e', 'general_hand', ],
             'level': 'DEBUG',
             'propagate': True,
-        },
+        },  # 1 и 2
 
-        'django.request': {  # 3 и 5
+        'django.request': {
             'handlers': ['errors_hand', 'mail_admins', ],
             'level': 'ERROR',
             'propagate': False,
-        },
+        },  # 3 и 5
 
-        'django.server': {  # 3 и 5
+        'django.server': {
             'handlers': ['errors_hand', 'mail_admins', ],
             'level': 'ERROR',
             'propagate': False,
-        },
+        },  # 3 и 5
 
-        'django.template': {  # 3
+        'django.template': {
             'handlers': ['errors_hand', ],
             'level': 'ERROR',
             'propagate': True,
-        },
+        },  # 3
 
-        'django.db.backends': {  # 3
+        'django.db.backends': {
             'handlers': ['errors_hand', ],
             'level': 'ERROR',
             'propagate': True,
-        },
+        },  # 3
 
-        'django.security': {  # 4
+        'django.security': {
             'handlers': ['security_hand', ],
             'level': 'INFO',
-            'propagate': True,  # TODO а может False
-        },
+            'propagate': False,
+        },  # 4
     }
 }
